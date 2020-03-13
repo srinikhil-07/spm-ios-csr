@@ -10,7 +10,7 @@ import spm_ios_csr
 import Security
 import OSLog
 
-class GenerateCSR {
+public class GenerateCSR {
     enum CSRGenerationError: Error {
         case keyExportError
         case csrGenerationError
@@ -20,7 +20,7 @@ class GenerateCSR {
     var privateAppTag = String()
     var publicKeyLabel = String()
     var privateKeyLabel = String()
-    func generateCSR(withOptins options: [String:String]) throws -> String {
+    public func generateCSR(withOptins options: [String:String]) throws -> String {
         var publicKey: SecKey?
         var privateKey: SecKey?
         let publicKeyAttr: [CFString: Any] = [
@@ -64,7 +64,7 @@ class GenerateCSR {
         }
     }
     ///Method to search if the keypair exists and delete them
-    func deleteKeyPairInKeychain() {
+    public func deleteKeyPairInKeychain() {
         var deleteQuery : [String: Any] = [kSecClass as String: kSecClassKey,
                                            kSecAttrApplicationTag as String: privateAppTag.data(using: String.Encoding.utf8) ?? Data(),
                                            kSecAttrKeyType as String: kSecAttrKeyTypeRSA]

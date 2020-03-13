@@ -8,6 +8,7 @@
 import Foundation
 import spm_ios_csr
 import Security
+import os
 
 public class GenerateCSR {
     enum CSRGenerationError: Error {
@@ -19,6 +20,7 @@ public class GenerateCSR {
     var privateAppTag = String()
     var publicKeyLabel = String()
     var privateKeyLabel = String()
+    public init() {}
     public func generateCSR(withOptins options: [String:String]) throws -> String {
         var publicKey: SecKey?
         var privateKey: SecKey?
@@ -43,8 +45,13 @@ public class GenerateCSR {
         if let publicKeyValue = publicKey {
             //let publicKeyData = SecKeyCopyExternalRepresentation(publicKeyValue, nil)
             var publicKeyData : CFData?
-            let exportStatus = SecItemExport(publicKeyValue, SecExternalFormat.formatBSAFE, [], nil, &publicKeyData)
-            guard exportStatus == errSecSuccess else {
+            var exportStatus : OSStatus
+            #if os(iOS) || os(watchOS)
+                exportStatus = SecKeyCopyExternalRepresentation(publicKeyValue, nil)
+            #elseif os(OSX)
+            exportStatus = SecItemExport(publicKeyValue, SecExternalFormat.formatBSAFE, [], nil, &publicKeyData)
+            #endif
+        guard exportStatus == errSecSuccess else {
                 NSLog("Public key export failed with error: %@",String(describing: exportStatus))
                 throw CSRGenerationError.keyExportError
             }

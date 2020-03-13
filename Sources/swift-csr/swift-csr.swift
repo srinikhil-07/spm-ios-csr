@@ -15,6 +15,7 @@ public class GenerateCSR {
         case keyExportError
         case csrGenerationError
         case keyGenerationError
+        case incompatibleiOSVersion
     }
     var publicAppTag = String()
     var privateAppTag = String()
@@ -45,9 +46,13 @@ public class GenerateCSR {
         if let publicKeyValue = publicKey {
             //let publicKeyData = SecKeyCopyExternalRepresentation(publicKeyValue, nil)
             var publicKeyData : CFData?
-            var exportStatus : OSStatus
+            var exportStatus = OSStatus()
             #if os(iOS) || os(watchOS)
-                exportStatus = SecKeyCopyExternalRepresentation(publicKeyValue, nil)
+            if #available(iOS 10.0, *) {
+                publicKeyData = SecKeyCopyExternalRepresentation(publicKeyValue, nil)
+            } else {
+                throw CSRGenerationError.incompatibleiOSVersion
+            }
             #elseif os(OSX)
             exportStatus = SecItemExport(publicKeyValue, SecExternalFormat.formatBSAFE, [], nil, &publicKeyData)
             #endif

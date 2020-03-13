@@ -8,7 +8,6 @@
 import Foundation
 import spm_ios_csr
 import Security
-import OSLog
 
 public class GenerateCSR {
     enum CSRGenerationError: Error {

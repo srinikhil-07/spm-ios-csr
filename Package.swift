@@ -4,12 +4,12 @@
 import PackageDescription
 
 let package = Package(
-    name: "spm-ios-csr",
+    name: "swift-csr",
     products: [
         // Products define the executables and libraries produced by a package, and make them visible to other packages.
         .library(
-            name: "spm-ios-csr",
-            targets: ["spm-ios-csr"]),
+            name: "swift-csr",
+            targets: ["swift-csr"]),
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
